@@ -2,6 +2,8 @@ const express = require('express');
 const dotenv = require('dotenv');
 const connectDB = require('./config/db');
 const errorHandler = require('./utils/errorHandler');
+const morgan = require('morgan');
+const cors=require('cors');
 
 // Load environment variables
 dotenv.config();
@@ -15,18 +17,16 @@ const app = express();
 // Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(morgan("dev"))
+app.use(cors());
 
 // Import routes
-const authRoutes = require('./routes/authRoutes');
-const courseRoutes = require('./routes/courseRoutes');
-const enrollmentRoutes = require('./routes/enrollmentRoutes');
-const gradeRoutes = require('./routes/gradeRoutes');
+const indexRouter = require('./routes/index');
+
 
 // Route handling
-app.use('/api/auth', authRoutes);
-app.use('/api/courses', courseRoutes);
-app.use('/api/enrollment', enrollmentRoutes);
-app.use('/api/grades', gradeRoutes);
+app.use('/', indexRouter);
+
 
 // Error handling middleware
 app.use(errorHandler);
